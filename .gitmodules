@@ -1,0 +1,24 @@
+[submodule "poky"]
+	path = poky
+	url = git://git.yoctoproject.org/poky
+	branch = krogoth
+[submodule "meta-openembedded"]
+	path = meta-openembedded
+	url = git://git.openembedded.org/meta-openembedded
+	branch = krogoth
+[submodule "meta-rust"]
+	path = meta-rust
+	url = https://github.com/meta-rust/meta-rust
+	branch = krogoth
+[submodule "meta-raspberrypi"]
+	path = meta-raspberrypi
+	url = git://git.yoctoproject.org/meta-raspberrypi
+	branch = krogoth
+[submodule "meta-updater"]
+	path = meta-updater
+	url = https://github.com/advancedtelematic/meta-updater
+	branch = krogoth
+[submodule "meta-updater-raspberrypi"]
+	path = meta-updater-raspberrypi
+	url = https://github.com/advancedtelematic/meta-updater-raspberrypi
+	branch = krogoth
