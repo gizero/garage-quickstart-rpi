@@ -15,3 +15,8 @@ To checkout:
 
 To build it:
 
+    cd ~/garage-quickstart-rpi
+    export TEMPLATECONF=~/garage-quickstart-rpi/meta-updater-raspberrypi/conf
+    source poky/oe-init-build-env
+    bitbake core-image-minimal
+
