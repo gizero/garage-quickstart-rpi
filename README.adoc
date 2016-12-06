@@ -1,0 +1,17 @@
+# ATS Garage Quickstart for Raspberry Pi
+
+This project uses git submodules to pull together the following layers:
+
+* meta-openembedded
+* meta-raspberrypi
+* meta-rust
+* meta-updater
+* meta-updater-raspberry-pi
+* poky
+
+To checkout:
+
+    git clone --recursive git@github.com:advancedtelematic/garage-quickstart-rpi.git
+
+To build it:
+
