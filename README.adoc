@@ -19,3 +19,10 @@ To build it:
     source env-init.sh
     bitbake core-image-minimal
 
+To write to SD card:
+
+    sudo dd if=core-image-minimal-raspberrypi3.rpi-sdimg-ota of=/dev/sdh bs=32M && sync
+    sudo fdisk /dev/sdX
+    # Delete the 2nd partition and recreate it with the same start address but fill the whole device
+    sudo resize2fs /dev/sdh2
+
