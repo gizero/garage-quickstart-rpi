@@ -22,10 +22,6 @@ To build it:
 To write to SD card:
 
     1. sudo dd if=./tmp/deploy/images/raspberrypi3/core-image-minimal-raspberrypi3.rpi-sdimg-ota of=/dev/sdX bs=32M && sync
-    2. sudo fdisk /dev/sdX
-	[p] to display the current partition table.
-	[d] to delete the 2nd partition.
-	[n] to create a new partition. Enter the same start address as mentioned above.
-	[w] to save, write and exit.
+    2. sudo parted -s /dev/sdX resizepart 2 '100%'
     3. sudo resize2fs /dev/sdX2
 
