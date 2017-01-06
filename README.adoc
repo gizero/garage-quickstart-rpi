@@ -1,4 +1,8 @@
-# ATS Garage Quickstart for Raspberry Pi
+= ATS Garage Quickstart for Raspberry Pi
+
+This repo is provided as a first Yocto build project to use with link:http://www.atsgarage.com[ATS Garage]. A more detailed guide to the project is available in the link:http://docs.atsgarage.com/ostree/starting-a-new-ostreeenabled-yocto-project.html[ATS Garage documentation].
+
+== Overview
 
 This project uses git submodules to pull together the following layers:
 
@@ -21,7 +25,6 @@ To build it:
 
 To write to SD card:
 
-    1. sudo dd if=./tmp/deploy/images/raspberrypi3/core-image-minimal-raspberrypi3.rpi-sdimg-ota of=/dev/sdX bs=32M && sync
-    2. sudo parted -s /dev/sdX resizepart 2 '100%'
-    3. sudo resize2fs /dev/sdX2
-
+. sudo dd if=./tmp/deploy/images/raspberrypi3/core-image-minimal-raspberrypi3.rpi-sdimg-ota of=/dev/sdX bs=32M && sync
+. sudo parted -s /dev/sdX resizepart 2 '100%'
+. sudo resize2fs /dev/sdX2
