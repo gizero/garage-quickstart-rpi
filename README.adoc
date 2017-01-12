@@ -21,10 +21,10 @@ To build it:
 
     cd garage-quickstart-rpi
     source env-init.sh
-    bitbake core-image-minimal
+    bitbake rpi-basic-image
 
 To write to SD card:
 
-. sudo dd if=./tmp/deploy/images/raspberrypi3/core-image-minimal-raspberrypi3.rpi-sdimg-ota of=/dev/sdX bs=32M && sync
+. sudo dd if=./tmp/deploy/images/raspberrypi3/rpi-basic-image-raspberrypi3.rpi-sdimg-ota of=/dev/sdX bs=32M && sync
 . sudo parted -s /dev/sdX resizepart 2 '100%'
 . sudo resize2fs /dev/sdX2
