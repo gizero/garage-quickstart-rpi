@@ -75,7 +75,7 @@ set -euo pipefail
 IMAGE_TO_FLASH=$1
 SOTA_CONFIG_FILE=$2
 DEVICE_TO_FLASH=$3
-SECOND_PARTITION=2
+
 echo " "
 echo "   Writing image file: $IMAGE_TO_FLASH "
 echo "   to device         : $DEVICE_TO_FLASH "
@@ -88,8 +88,9 @@ else
 fi
 
 echo "Cleaning up any leftover files from previous runs..."
-rm image-to-flash-temp.img
-rmdir mnt-temp
+umount mnt-temp || true
+rm image-to-flash-temp.img || true
+rmdir mnt-temp || true
 
 echo "Unmounting all partitions on $DEVICE_TO_FLASH"
 umount $DEVICE_TO_FLASH* || true
@@ -108,26 +109,31 @@ cp $SOTA_CONFIG_FILE mnt-temp/boot/sota.toml
 sleep 1
 
 echo "Unmounting image..."
-umount ./mnt-temp
+umount -f ./mnt-temp
 sleep 2
 
 echo "Writing image to $DEVICE_TO_FLASH..."
 dd if=image-to-flash-temp.img of=$DEVICE_TO_FLASH bs=32M && sync
 sleep 2
 
+# It turns out there are card readers that give their partitions funny names, like
+# "/dev/mmcblk0" will be the device, but the partitions are called "/dev/mmcblk0p1"
+# for example. Better to just get the name of the partition after we flash it.
+SECOND_PARTITION=$(fdisk -l -o Device $DEVICE_TO_FLASH | tail -n 1)
+
 echo "Resizing rootfs partition to fill all of $DEVICE_TO_FLASH..."
 parted -s $DEVICE_TO_FLASH resizepart 2 '100%'
 sleep 2
-e2fsck -f $DEVICE_TO_FLASH$SECOND_PARTITION || true
+e2fsck -f $SECOND_PARTITION || true
 sleep 2
 
-echo "Resizing filesystem on $DEVICE_TO_FLASH$SECOND_PARTITION to match partition size..."
-resize2fs -p $DEVICE_TO_FLASH$SECOND_PARTITION
+echo "Resizing filesystem on $SECOND_PARTITION to match partition size..."
+resize2fs -p $SECOND_PARTITION
 sleep 2
 
 echo "Cleaning up..."
-rm image-to-flash-temp.img
-rmdir mnt-temp
+rm image-to-flash-temp.img || true
+rmdir mnt-temp || true
 
 echo "Done!"
 
