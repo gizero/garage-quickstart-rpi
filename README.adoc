@@ -1,6 +1,6 @@
 = ATS Garage Quickstart for Raspberry Pi
 
-This repo is provided as a first Yocto build project to use with link:http://www.atsgarage.com[ATS Garage]. A more detailed guide to the project is available in the link:http://docs.atsgarage.com/ostree/starting-a-new-ostreeenabled-yocto-project.html[ATS Garage documentation].
+This repo is provided as a first Yocto build project to use with link:http://www.atsgarage.com[ATS Garage]. A more detailed guide to the project is available in the link:http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html[ATS Garage documentation].
 
 == Overview
 
