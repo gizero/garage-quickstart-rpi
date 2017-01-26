@@ -70,6 +70,13 @@ if [ -z "$3" ]; then
   exit 1
 fi
 
+command -v dd >/dev/null 2>&1 || { echo >&2 "This script requires dd, but it's not installed.  Aborting."; exit 1; }
+command -v parted >/dev/null 2>&1 || { echo >&2 "This script requires parted, but it's not installed.  Aborting."; exit 1; }
+command -v e2fsck >/dev/null 2>&1 || { echo >&2 "This script requires e2fsck, but it's not installed.  Aborting."; exit 1; }
+command -v fdisk >/dev/null 2>&1 || { echo >&2 "This script requires fdisk, but it's not installed.  Aborting."; exit 1; }
+command -v resize2fs >/dev/null 2>&1 || { echo >&2 "This script requires resize2fs, but it's not installed.  Aborting."; exit 1; }
+
+
 set -euo pipefail
 
 IMAGE_TO_FLASH=$1
@@ -101,7 +108,7 @@ echo "Creating temporary image file from $IMAGE_TO_FLASH..."
 cp $IMAGE_TO_FLASH image-to-flash-temp.img
 
 echo "Mounting temporary image file..."
-mount -o rw,loop,offset=$(expr 512 \* $(fdisk -l -o Start image-to-flash-temp.img |tail -n 1)) image-to-flash-temp.img ./mnt-temp
+mount -o rw,loop,offset=$(expr 512 \* $(fdisk -l image-to-flash-temp.img | tail -n 1 | awk '{print $2}')) image-to-flash-temp.img ./mnt-temp
 sleep 2
 
 echo "Adding config file to image..."
@@ -119,7 +126,7 @@ sleep 2
 # It turns out there are card readers that give their partitions funny names, like
 # "/dev/mmcblk0" will be the device, but the partitions are called "/dev/mmcblk0p1"
 # for example. Better to just get the name of the partition after we flash it.
-SECOND_PARTITION=$(fdisk -l -o Device $DEVICE_TO_FLASH | tail -n 1)
+SECOND_PARTITION=$(fdisk -l $DEVICE_TO_FLASH | tail -n 1 | awk '{print $1}')
 
 echo "Resizing rootfs partition to fill all of $DEVICE_TO_FLASH..."
 parted -s $DEVICE_TO_FLASH resizepart 2 '100%'
