@@ -94,33 +94,30 @@ else
     exit 1
 fi
 
-echo "Cleaning up any leftover files from previous runs..."
-umount mnt-temp || true
-rm image-to-flash-temp.img || true
-rmdir mnt-temp || true
+TEMP_IMAGE_FILE=$(mktemp yocto-image.XXXXXX)
+TEMP_MOUNT_DIR=$(mktemp -d mountpoint.XXXXXX)
 
 echo "Unmounting all partitions on $DEVICE_TO_FLASH"
 umount $DEVICE_TO_FLASH* || true
 sleep 2
-mkdir mnt-temp
 
 echo "Creating temporary image file from $IMAGE_TO_FLASH..."
-cp $IMAGE_TO_FLASH image-to-flash-temp.img
+cp $IMAGE_TO_FLASH $TEMP_IMAGE_FILE
 
 echo "Mounting temporary image file..."
-mount -o rw,loop,offset=$(expr 512 \* $(fdisk -l image-to-flash-temp.img | tail -n 1 | awk '{print $2}')) image-to-flash-temp.img ./mnt-temp
+mount -o rw,loop,offset=$(expr 512 \* $(fdisk -l $TEMP_IMAGE_FILE| tail -n 1 | awk '{print $2}')) $TEMP_IMAGE_FILE $TEMP_MOUNT_DIR
 sleep 2
 
 echo "Adding config file to image..."
-cp $SOTA_CONFIG_FILE mnt-temp/boot/sota.toml
+cp $SOTA_CONFIG_FILE $TEMP_MOUNT_DIR/boot/sota.toml
 sleep 1
 
 echo "Unmounting image..."
-umount -f ./mnt-temp
+umount -f $TEMP_MOUNT_DIR
 sleep 2
 
 echo "Writing image to $DEVICE_TO_FLASH..."
-dd if=image-to-flash-temp.img of=$DEVICE_TO_FLASH bs=32M && sync
+dd if=$TEMP_IMAGE_FILE of=$DEVICE_TO_FLASH bs=32M && sync
 sleep 2
 
 # It turns out there are card readers that give their partitions funny names, like
@@ -139,8 +136,8 @@ resize2fs -p $SECOND_PARTITION
 sleep 2
 
 echo "Cleaning up..."
-rm image-to-flash-temp.img || true
-rmdir mnt-temp || true
+rm $TEMP_IMAGE_FILE || true
+rmdir $TEMP_MOUNT_DIR || true
 
 echo "Done!"
 
