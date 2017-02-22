@@ -1,30 +1,47 @@
-= ATS Garage Quickstart for Raspberry Pi
+= ATS Garage Quickstart
 
-This repo is provided as a first Yocto build project to use with link:http://www.atsgarage.com[ATS Garage]. A more detailed guide to the project is available in the link:http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html[ATS Garage documentation].
+This repo is provided as a first Yocto build project to use with
+http://www.atsgarage.com[ATS Garage]. A more detailed guide to the project
+is available in the
+http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html[ATS
+Garage documentation].
 
-== Overview
+== Getting started
 
-This project uses git submodules to pull together the following layers:
-
-* meta-openembedded
-* meta-raspberrypi
-* meta-rust
-* meta-updater
-* meta-updater-raspberry-pi
-* poky
-
-To checkout:
+Clone the repo and source the environment in the following way:
 
     git clone --recursive git@github.com:advancedtelematic/garage-quickstart-rpi.git
-
-To build it:
-
     cd garage-quickstart-rpi
-    source env-init.sh
+    source env-init.sh [architecture]
+
+Currently supported values for _architecture_ are `raspberrypi` and `qemux86-64`.
+If you don't specify an architecture, `raspberrypi` will be used as a default.
+
+You are now ready to build a Raspberry Pi or QEMU image.
+
+=== Raspberry Pi
+
+To build the image, issue:
+
     bitbake rpi-basic-image
 
-To write to SD card:
+To write the image to a SD card, do the following:
 
-. sudo dd if=./tmp/deploy/images/raspberrypi3/rpi-basic-image-raspberrypi3.rpi-sdimg-ota of=/dev/sdX bs=32M && sync
-. sudo parted -s /dev/sdX resizepart 2 '100%'
-. sudo resize2fs /dev/sdX2
+    sudo dd if=./tmp/deploy/images/raspberrypi3/rpi-basic-image-raspberrypi3.rpi-sdimg-ota \
+              of=/dev/sdX bs=32M && sync
+    sudo parted -s /dev/sdX resizepart 2 '100%'
+    sudo resize2fs /dev/sdX2
+
+=== Qemu
+
+To build the image, issue:
+
+    bitbake core-image-minimal
+
+You'll need to add a sota.toml to the image; refer to the
+http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html[ATS
+Garage documentation] for details.
+
+To boot the image inside `qemu`, use the following shell script:
+
+    ./meta-updater-qemux86-64/scripts/run-qemu
