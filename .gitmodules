@@ -1,11 +1,11 @@
 [submodule "poky"]
 	path = poky
 	url = git://git.yoctoproject.org/poky
-	branch = krogoth
+	branch = morty
 [submodule "meta-openembedded"]
 	path = meta-openembedded
 	url = git://git.openembedded.org/meta-openembedded
-	branch = krogoth
+	branch = morty
 [submodule "meta-rust"]
 	path = meta-rust
 	url = https://github.com/meta-rust/meta-rust
@@ -13,7 +13,7 @@
 [submodule "meta-raspberrypi"]
 	path = meta-raspberrypi
 	url = git://git.yoctoproject.org/meta-raspberrypi
-	branch = krogoth
+	branch = morty
 [submodule "meta-updater"]
 	path = meta-updater
 	url = https://github.com/advancedtelematic/meta-updater
