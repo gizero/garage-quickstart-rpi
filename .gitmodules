@@ -24,6 +24,6 @@
 	branch = krogoth
 [submodule "meta-updater-qemux86-64"]
 	path = meta-updater-qemux86-64
-	url = git@github.com:advancedtelematic/meta-updater-qemux86-64
+	url = https://github.com/advancedtelematic/meta-updater-qemux86-64
 	branch = krogoth
 
